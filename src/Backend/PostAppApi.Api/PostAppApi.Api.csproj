@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.25">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -14,6 +20,11 @@
     <ProjectReference Include="..\..\Shared\PostAppApi.Comunicacao\PostAppApi.Comunicacao.csproj" />
     <ProjectReference Include="..\..\Shared\PostAppApi.Exceptions\PostAppApi.Exceptions.csproj" />
     <ProjectReference Include="..\PostAppApi.Application\PostAppApi.Application.csproj" />
+    <ProjectReference Include="..\PostAppApi.Infrastructure\PostAppApi.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
