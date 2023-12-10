@@ -1,10 +1,13 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using PostAppApi.Infrastructure;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+var connection = builder.Configuration.GetConnectionString("MysqlConnection");
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<PostAppApiContext>(
+    options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
