@@ -1,8 +1,8 @@
-﻿using PostAppApi.Domain.Commons;
+﻿using PostAppApi.Domain.Models;
 
-namespace PostAppApi.Domain.Models
+namespace PostAppApi.Application.ModelViews.User
 {
-    public class User : BaseEntity
+    public class UserPostRequestBody
     {
         public string Username { get; set; }
         public string Email { get; set; }
