@@ -1,4 +1,4 @@
-﻿namespace PostAppApi.Domain.Common
+﻿namespace PostAppApi.Domain.Commons
 {
     public class BaseEntity
     {

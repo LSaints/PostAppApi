@@ -1,4 +1,4 @@
-﻿using PostAppApi.Domain.Common;
+﻿using PostAppApi.Domain.Commons;
 
 namespace PostAppApi.Domain.Models
 {

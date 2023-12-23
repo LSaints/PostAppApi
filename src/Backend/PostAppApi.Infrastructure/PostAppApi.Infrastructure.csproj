@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PostAppApi.Application\PostAppApi.Application.csproj" />
     <ProjectReference Include="..\PostAppApi.Domain\PostAppApi.Domain.csproj" />
   </ItemGroup>
 
