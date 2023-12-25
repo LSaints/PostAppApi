@@ -26,12 +26,16 @@ namespace PostAppApi.Infrastructure.Repositories
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _context.Users.AsNoTracking().ToListAsync();
+            return await _context.Users
+                .Include(e => e.Posts)
+                .AsNoTracking().ToListAsync();
         }
 
         public async Task<User> GetByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users
+                .Include(e => e.Posts)
+                .SingleOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<User> InsertAsync(User entity)
