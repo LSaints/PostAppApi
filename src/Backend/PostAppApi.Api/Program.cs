@@ -1,16 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using PostAppApi.Api.Configuration;
-using PostAppApi.Application.Implementations;
-using PostAppApi.Application.Interfaces.Manager;
-using PostAppApi.Application.Interfaces.Repositories;
 using PostAppApi.Infrastructure;
-using PostAppApi.Infrastructure.Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connection = builder.Configuration.GetConnectionString("MysqlConnection");
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(
+    x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -19,9 +17,7 @@ builder.Services.AddDbContext<PostAppApiContext>(
 
 builder.Services.AddScoped<DbContext, PostAppApiContext>();
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-builder.Services.AddScoped<IUserManager, UserManager>();
+builder.Services.UseDependecyInjectionConfiguration();
 
 builder.Services.UseAutoMapperConfiguration();
 
