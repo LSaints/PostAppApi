@@ -3,6 +3,7 @@ using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Application.Interfaces.Repositories;
 using PostAppApi.Application.ModelViews.User;
 using PostAppApi.Domain.Models;
+using System.Text;
 
 namespace PostAppApi.Application.Implementations
 {
@@ -34,6 +35,10 @@ namespace PostAppApi.Application.Implementations
         public async Task<User> InsertAsync(UserPostRequestBody entity)
         {
             var entityBody = _mapper.Map<User>(entity);
+            byte[] hash, salt;
+            GenerateHash(entity.Password, out hash, out salt);
+            entityBody.PasswordHash = hash;
+            entityBody.PasswordSalt = salt;
             return await _userRepository.InsertAsync(entityBody);
         }
 
@@ -51,6 +56,15 @@ namespace PostAppApi.Application.Implementations
         public Task<User> UpdateAsync(User entity)
         {
             throw new NotImplementedException();
+        }
+
+        public void GenerateHash(String password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hash = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordHash = hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+                passwordSalt = hash.Key;
+            }
         }
     }
 }

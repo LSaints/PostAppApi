@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PostAppApi.Infrastructure;
 
@@ -10,9 +11,10 @@ using PostAppApi.Infrastructure;
 namespace PostAppApi.Infrastructure.Migrations
 {
     [DbContext(typeof(PostAppApiContext))]
-    partial class PostAppApiContextModelSnapshot : ModelSnapshot
+    [Migration("20231225134934_Adicionado-PasswordHash-Tabela-usuario")]
+    partial class AdicionadoPasswordHashTabelausuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
