@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Backend\PostAppApi.Domain\PostAppApi.Domain.csproj" />
-  </ItemGroup>
-
 </Project>
