@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\PostAppApi.Comunicacao\PostAppApi.Comunicacao.csproj" />
     <ProjectReference Include="..\PostAppApi.Domain\PostAppApi.Domain.csproj" />
   </ItemGroup>
 
