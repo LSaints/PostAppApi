@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PostAppApi.Domain.Enums;
 using PostAppApi.Domain.Models;
 
 namespace PostAppApi.Infrastructure
@@ -7,6 +8,7 @@ namespace PostAppApi.Infrastructure
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public PostAppApiContext() { }
         public PostAppApiContext(DbContextOptions<PostAppApiContext> options) : base(options) { }
@@ -30,6 +32,16 @@ namespace PostAppApi.Infrastructure
                 .WithOne(e => e.User)
                 .HasForeignKey(e => e.UserId)
                 .IsRequired();
+    
+            modelBuilder.Entity<Post>()
+                .HasMany(e => e.Ratings)
+                .WithOne(e => e.Post)
+                .HasForeignKey(e => e.PostId)
+                .IsRequired();
+
+            modelBuilder.Entity<Rating>()
+                .HasKey(e => new { e.Id, e.UserId, e.PostId });
+
         }
     }
 }

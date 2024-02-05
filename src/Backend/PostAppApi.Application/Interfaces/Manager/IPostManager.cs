@@ -1,6 +1,5 @@
 ﻿using PostAppApi.Application.Interfaces.Commons;
-using PostAppApi.Application.ModelViews.Post;
-using PostAppApi.Application.ModelViews.User;
+using PostAppApi.Comunicacao.ModelViews.Post;
 using PostAppApi.Domain.Models;
 
 namespace PostAppApi.Application.Interfaces.Manager
@@ -9,5 +8,6 @@ namespace PostAppApi.Application.Interfaces.Manager
     {
         public Task<Post> InsertAsync(PostPostRequestBody entity);
         public Task<Post> UpdateAsync(PostPutRequestBody entity);
+        public Task<IEnumerable<Post>> GetAllPostsByUserIdAsync(int id);
     }
 }

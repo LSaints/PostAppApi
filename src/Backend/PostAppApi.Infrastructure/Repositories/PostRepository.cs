@@ -28,8 +28,16 @@ namespace PostAppApi.Infrastructure.Repositories
         {
             return await _context.Posts
                 .Include(e => e.User)
+                .Include(e => e.Ratings)
+                .OrderByDescending(e => e.CreatedAt.Date)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Post>> GetAllPostsByUserIdAsync(int id)
+        {
+            return await _context.Posts
+                .FromSqlRaw($"select * from posts where UserId = {id}").AsNoTracking().ToListAsync();
         }
 
         public async Task<Post> GetByIdAsync(int id)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PostAppApi.Application.Interfaces.Manager;
-using PostAppApi.Application.ModelViews.User;
+using PostAppApi.Comunicacao.ModelViews.User;
 using PostAppApi.Domain.Models;
 
 namespace PostAppApi.Api.Controllers
@@ -20,6 +20,27 @@ namespace PostAppApi.Api.Controllers
         public async Task<ActionResult> GetUsers()
         {
             return Ok(await _manager.GetAllAsync());
+        }
+
+        // GET: api/Users/username
+        [HttpGet]
+        [Route("username")]
+        public async Task<ActionResult<User>> GetByUsername(string username)
+        {
+            var user = await _manager.GetByUsername(username);
+            if (user == null)
+            {
+                return NotFound("Usuario não encontrado 404");
+            }
+            return Ok(user);
+        }
+
+        // GET: api/Users/email
+        [HttpGet]
+        [Route("email")]
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            return Ok(await _manager.GetByEmailAsync(email));
         }
 
         // GET: api/Users/5

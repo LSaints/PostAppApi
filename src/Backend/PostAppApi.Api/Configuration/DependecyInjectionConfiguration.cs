@@ -11,8 +11,12 @@ namespace PostAppApi.Api.Configuration
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserManager, UserManager>();
+
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IPostManager, PostManager>();
+
+            services.AddScoped<IRatingRepository, RatingRepository>();
+            services.AddScoped<IRatingManager, RatingManager>();
         }
     }
 }
