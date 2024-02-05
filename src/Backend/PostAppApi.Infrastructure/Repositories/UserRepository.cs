@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PostAppApi.Application.Interfaces.Repositories;
+using PostAppApi.Domain.Enums;
 using PostAppApi.Domain.Models;
 
 namespace PostAppApi.Infrastructure.Repositories
@@ -31,6 +32,12 @@ namespace PostAppApi.Infrastructure.Repositories
                 .AsNoTracking().ToListAsync();
         }
 
+        public async Task<User> GetByEmail(string email)
+        {
+            return await _context.Users
+                .FromSqlRaw($"select * from users where Email = '{email}'").FirstOrDefaultAsync();
+        }
+
         public async Task<User> GetByIdAsync(int id)
         {
             return await _context.Users
@@ -38,9 +45,22 @@ namespace PostAppApi.Infrastructure.Repositories
                 .SingleOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<User> GetByLogin(User user)
+        {
+            string sql = $"select * from users where Email = '{user.Email}' and Password = '{user.Password}'";
+            return await _context.Users.FromSqlRaw(sql).FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetByUsername(string username)
+        {
+            return await _context.Users
+                .FromSqlRaw($"select * from users where Username = '{username}'").FirstOrDefaultAsync();
+        }
+
         public async Task<User> InsertAsync(User entity)
         {
             entity.CreatedAt = DateTime.Now;
+            entity.Roles = Roles.User;
             await _context.Users.AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Application.Interfaces.Repositories;
-using PostAppApi.Application.ModelViews.Post;
+using PostAppApi.Comunicacao.ModelViews.Post;
 using PostAppApi.Domain.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace PostAppApi.Application.Implementations
 {
@@ -10,6 +11,7 @@ namespace PostAppApi.Application.Implementations
     {
         private readonly IPostRepository _repository;
         private readonly IMapper _mapper;
+
         public PostManager(IPostRepository repository, IMapper mapper) 
         {
             _repository = repository;
@@ -25,13 +27,26 @@ namespace PostAppApi.Application.Implementations
             return await _repository.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Post>> GetAllPostsByUserIdAsync(int id)
+        {
+            return await _repository.GetAllPostsByUserIdAsync(id);
+        }
+
         public async Task<Post> GetByIdAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            var post = await _repository.GetByIdAsync(id);
+            if (post == null)
+                throw new Exception("ID da postagem informado não foi encontrado ou é inválido");
+
+            return post;
         }
 
         public async Task<Post> InsertAsync(PostPostRequestBody entity)
         {
+            if (entity.UserId <= 0)
+                throw new Exception("Postagem não foi atribuida a nenhum usuário");
+
+            Validator.ValidateObject(entity, new ValidationContext(entity), true);
             var entityBody = _mapper.Map<Post>(entity);
             return await _repository.InsertAsync(entityBody);
         }

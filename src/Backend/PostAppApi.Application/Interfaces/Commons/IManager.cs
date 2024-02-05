@@ -1,4 +1,7 @@
-﻿namespace PostAppApi.Application.Interfaces.Commons
+﻿using PostAppApi.Comunicacao.ModelViews.Rating;
+using PostAppApi.Domain.Models;
+
+namespace PostAppApi.Application.Interfaces.Commons
 {
     public interface IManager<T>
     {

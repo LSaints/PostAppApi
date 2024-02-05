@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PostAppApi.Application.Interfaces.Manager;
-using PostAppApi.Application.ModelViews.Post;
+using PostAppApi.Comunicacao.ModelViews.Post;
 using PostAppApi.Domain.Models;
 
 namespace PostAppApi.Api.Controllers
@@ -21,6 +21,15 @@ namespace PostAppApi.Api.Controllers
         public async Task<ActionResult> GetPosts()
         {
             return Ok(await _manager.GetAllAsync());
+        }
+
+
+        // GET: api/Posts/user
+        [HttpGet]
+        [Route("user")]
+        public async Task<ActionResult> GetPostByUserId(int id)
+        {
+            return Ok(await _manager.GetAllPostsByUserIdAsync(id));
         }
 
         // GET: api/Posts/5
