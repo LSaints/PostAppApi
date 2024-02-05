@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PostAppApi.Api.Configuration;
 using PostAppApi.Infrastructure;
+using System;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,7 @@ var key = Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"]);
 
 builder.Services.AddControllers().AddJsonOptions(
     x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
 
 builder.Services.AddCors(options =>
 {
@@ -63,6 +65,10 @@ builder.Services.UseAutoMapperConfiguration();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+await using var dbContext = scope.ServiceProvider.GetRequiredService<PostAppApiContext>();
+await dbContext.Database.MigrateAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
