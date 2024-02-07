@@ -21,11 +21,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins(
-                "http://localhost",
-                "http://localhost:4200",
-                "https://localhost:7230",
-                "http://localhost:90")
+            builder.WithOrigins("*")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .SetIsOriginAllowedToAllowWildcardSubdomains();
@@ -42,9 +38,8 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(x =>
-    {
+}).AddJwtBearer(x =>
+  {
         x.RequireHttpsMetadata = false;
         x.SaveToken = true;
         x.TokenValidationParameters = new TokenValidationParameters
@@ -54,7 +49,7 @@ builder.Services.AddAuthentication(x =>
             ValidateIssuer = false,
             ValidateAudience = false,
         };
-    });
+  });
 
 builder.Services.AddScoped<DbContext, PostAppApiContext>();
 
@@ -77,7 +72,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(options => options.AllowAnyOrigin());
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

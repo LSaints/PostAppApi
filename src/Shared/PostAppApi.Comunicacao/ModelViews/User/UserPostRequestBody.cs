@@ -13,6 +13,6 @@ namespace PostAppApi.Comunicacao.ModelViews.User
         public string Password { get; set; }
         [Required]
         public Roles Roles { get; set; }
-        public ICollection<Domain.Models.Post?> Posts { get; }
+        public ICollection<Domain.Models.Post>? Posts { get; }
     }
 }
