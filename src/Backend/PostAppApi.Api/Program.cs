@@ -79,6 +79,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.MapGet("/", () => "Post App Api em produção!");
+
 app.UseAuthentication();
 
 app.UseAuthorization();
