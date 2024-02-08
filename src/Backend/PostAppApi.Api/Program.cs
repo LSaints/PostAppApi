@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using PostAppApi.Api.Configuration;
 using PostAppApi.Infrastructure;
 using System;
+using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -15,6 +16,10 @@ var key = Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"]);
 builder.Services.AddControllers().AddJsonOptions(
     x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.KnownProxies.Add(IPAddress.Parse("10.0.0.156"));
+});
 
 builder.Services.AddCors(options =>
 {
