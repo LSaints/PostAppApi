@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "DEV": {
+    "DESENVOLVIMENTO": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -27,12 +27,20 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PROD": {
+    "PRODUÇÃO": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
+    "HOMOLOGAÇÃO": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
       }
     }
   }
