@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PostAppApi.Api.Configuration;
 using PostAppApi.Infrastructure;
+using System;
 using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -65,6 +66,10 @@ builder.Services.UseAutoMapperConfiguration();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+await using var dbContext = scope.ServiceProvider.GetRequiredService<PostAppApiContext>();
+await dbContext.Database.MigrateAsync();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
