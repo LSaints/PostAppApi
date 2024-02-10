@@ -19,7 +19,7 @@ builder.Services.AddControllers().AddJsonOptions(
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.KnownProxies.Add(IPAddress.Parse("10.0.0.156"));
+    options.KnownProxies.Add(IPAddress.Parse("10.0.0.191"));
 });
 
 builder.Services.AddCors(options =>
