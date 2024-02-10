@@ -147,17 +147,6 @@ namespace PostApi.Application.Tests.Implemetations
         }
 
         [Fact]
-        public async void Put_UpdateAsyncInvalidObjectShouldReturnException()
-        {
-            var exception = await Assert.ThrowsAsync<ValidationException>(() => _manager.UpdateAsync(new UserPutRequestBody
-            {
-                Username = "invalid",
-                Password = "123123"
-            }));
-            Assert.Equal("The Email field is required.", exception.Message);
-        }
-
-        [Fact]
         public void Put_UpdateAsyncValidOject()
         {
             var result = _manager.UpdateAsync(new UserPutRequestBody

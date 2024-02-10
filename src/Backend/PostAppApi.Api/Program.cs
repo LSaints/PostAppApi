@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PostAppApi.Api.Configuration;
 using PostAppApi.Infrastructure;
-using System;
+using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -15,17 +16,17 @@ var key = Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"]);
 builder.Services.AddControllers().AddJsonOptions(
     x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.KnownProxies.Add(IPAddress.Parse("10.0.0.156"));
+});
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins(
-                "http://localhost",
-                "http://localhost:4200",
-                "https://localhost:7230",
-                "http://localhost:90")
+            builder.WithOrigins("*")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .SetIsOriginAllowedToAllowWildcardSubdomains();
@@ -42,9 +43,8 @@ builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(x =>
-    {
+}).AddJwtBearer(x =>
+  {
         x.RequireHttpsMetadata = false;
         x.SaveToken = true;
         x.TokenValidationParameters = new TokenValidationParameters
@@ -54,7 +54,7 @@ builder.Services.AddAuthentication(x =>
             ValidateIssuer = false,
             ValidateAudience = false,
         };
-    });
+  });
 
 builder.Services.AddScoped<DbContext, PostAppApiContext>();
 
@@ -66,9 +66,10 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope();
-await using var dbContext = scope.ServiceProvider.GetRequiredService<PostAppApiContext>();
-await dbContext.Database.MigrateAsync();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -77,11 +78,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(options => options.AllowAnyOrigin());
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
+
+app.MapGet("/", () => $"Post App Api em {builder.Configuration["env"]}");
 
 app.UseAuthorization();
 
