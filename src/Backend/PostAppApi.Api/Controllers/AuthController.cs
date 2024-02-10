@@ -16,7 +16,6 @@ namespace PostAppApi.Api.Controllers
             _manager = manager;
         }
         [HttpPost]
-        [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate([FromBody] UserLoginRequestBody user)
         {
             var userLogin = await _manager.GetByLogin(user);
