@@ -7,7 +7,7 @@ using PostAppApi.Infrastructure;
 using System.Text;
 using System.Text.Json.Serialization;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var AllowOrigin = "AllowOrigin";
 var builder = WebApplication.CreateBuilder(args);
 var origins = builder.Configuration["AllowedHosts"];
 var connection = builder.Configuration.GetConnectionString("MysqlConnection");
@@ -18,14 +18,8 @@ builder.Services.AddControllers().AddJsonOptions(
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        builder =>
-        {
-            builder.WithOrigins("*")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .SetIsOriginAllowedToAllowWildcardSubdomains();
-        });
+    options.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().
+     AllowAnyHeader());
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -77,7 +71,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("_myAllowSpecificOrigins");
+app.UseCors("AllowOrigin");
 
 if (!app.Environment.IsDevelopment())
 {
