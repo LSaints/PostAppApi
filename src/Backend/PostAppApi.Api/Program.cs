@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Serilog;
 using PostAppApi.Api.Middlewares;
+using PostAppApi.Api.Extensions;
 
 try
 {
