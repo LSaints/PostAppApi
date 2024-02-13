@@ -1,9 +1,8 @@
 ﻿using Serilog;
 using Serilog.Events;
-using Serilog.Exceptions;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace PostAppApi.Api.Configuration
+namespace PostAppApi.Api.Extensions
 {
     public static class SerilogExtension
     {
@@ -11,7 +10,6 @@ namespace PostAppApi.Api.Configuration
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.WithMachineName()
-                .Enrich.WithExceptionDetails()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
                 .CreateLogger();
