@@ -3,6 +3,7 @@ using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Application.Interfaces.Repositories;
 using PostAppApi.Comunicacao.ModelViews.Post;
 using PostAppApi.Domain.Models;
+using PostAppApi.Exceptions.PostExceptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace PostAppApi.Application.Implementations
@@ -12,13 +13,15 @@ namespace PostAppApi.Application.Implementations
         private readonly IPostRepository _repository;
         private readonly IMapper _mapper;
 
-        public PostManager(IPostRepository repository, IMapper mapper) 
+        public PostManager(IPostRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
         public async Task DeleteAsync(int id)
         {
+            var post = await _repository.GetByIdAsync(id);
+            if (post == null || id <= 0) throw new PostNotFoundException();
             await _repository.DeleteAsync(id);
         }
 
@@ -29,25 +32,27 @@ namespace PostAppApi.Application.Implementations
 
         public async Task<IEnumerable<Post>> GetAllPostsByUserIdAsync(int id)
         {
-            return await _repository.GetAllPostsByUserIdAsync(id);
+            var posts = await _repository.GetAllPostsByUserIdAsync(id);
+            if (posts.All(p => p.UserId == null)) throw new PostNotFoundException();
+            return posts;
         }
 
         public async Task<Post> GetByIdAsync(int id)
         {
             var post = await _repository.GetByIdAsync(id);
-            if (post == null)
-                throw new Exception("ID da postagem informado não foi encontrado ou é inválido");
-
+            if (post == null) throw new PostNotFoundException();
             return post;
         }
 
         public async Task<Post> InsertAsync(PostPostRequestBody entity)
         {
-            if (entity.UserId <= 0)
-                throw new Exception("Postagem não foi atribuida a nenhum usuário");
 
             Validator.ValidateObject(entity, new ValidationContext(entity), true);
             var entityBody = _mapper.Map<Post>(entity);
+
+            if (entity.UserId <= 0) throw new UnattributedPostException();
+            if (await UserExists(entityBody) == false) throw new UserNotFoundException();
+
             return await _repository.InsertAsync(entityBody);
         }
 
@@ -58,13 +63,28 @@ namespace PostAppApi.Application.Implementations
 
         public async Task<Post> UpdateAsync(PostPutRequestBody entity)
         {
+
             var entityBody = _mapper.Map<Post>(entity);
+            var post = await _repository.GetByIdAsync(entity.Id);
+
+            if (post == null || entity.Id <= 0) throw new PostNotFoundException();
+            if (entity.UserId <= 0) throw new UnattributedPostException();
+            if (await UserExists(entityBody) == false) throw new UserNotFoundException();
+
             return await _repository.UpdateAsync(entityBody);
         }
 
         public Task<Post> UpdateAsync(Post entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> UserExists(Post entity)
+        {
+            var result = await _repository.UserExists(entity);
+            if (result == false)
+                return result;
+            return result;
         }
     }
 }
