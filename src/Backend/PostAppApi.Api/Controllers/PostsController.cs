@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc; 
+﻿using Microsoft.AspNetCore.Mvc;
 using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Comunicacao.ModelViews.Post;
 using PostAppApi.Domain.Models;
+using PostAppApi.Exceptions.PostExceptions;
 using Serilog;
 
 namespace PostAppApi.Api.Controllers
@@ -37,17 +38,17 @@ namespace PostAppApi.Api.Controllers
 
         // GET: api/Posts/user
         [HttpGet]
-        [Route("user")]
+        [Route("user/{id}")]
         public async Task<ActionResult> GetPostByUserId(int id)
         {
             try
             {
                 Log.Information($"Requisição:GET para api/Posts/user/{id}");
                 return Ok(await _manager.GetAllPostsByUserIdAsync(id));
-            } catch (Exception ex)
+            } catch (PostNotFoundException ex)
             {
-                Log.Error(ex.ToString());
-                return NotFound(ex.Message);
+                Log.Error(ex.Message);
+                throw ex;
             }
         }
 
@@ -59,10 +60,10 @@ namespace PostAppApi.Api.Controllers
             {
                 Log.Information($"Requisição:GET para api/Posts/{id}");
                 return Ok(await _manager.GetByIdAsync(id));
-            } catch (Exception ex)
+            } catch (PostNotFoundException ex)
             {
-                Log.Error(ex.ToString());
-                return NotFound(ex.Message);
+                Log.Error(ex.Message);
+                throw ex;
             }
         }
 
@@ -76,10 +77,18 @@ namespace PostAppApi.Api.Controllers
                 Log.Information("Requisição:PUT para api/Posts");
                 var entityUpdate = await _manager.UpdateAsync(post);
                 return Ok(entityUpdate);
-            } catch (Exception ex)
+            } catch (UnattributedPostException ex)
             {
                 Log.Error(ex.Message);
-                return NotFound(ex.ToString());
+                throw ex;
+            } catch (UserNotFoundException ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
+            } catch (PostNotFoundException ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
             }
         }
 
@@ -93,11 +102,14 @@ namespace PostAppApi.Api.Controllers
                 Log.Information("Requisição:POST para api/Posts");
                 var entityInsert = await _manager.InsertAsync(post);
                 return CreatedAtAction(nameof(GetPosts), new { id = entityInsert.Id }, entityInsert);
-
-            } catch (Exception ex)
+            } catch (UnattributedPostException ex)
             {
-                Log.Error(ex.ToString());
-                return BadRequest(ex.Message);
+                Log.Error(ex.Message);
+                throw ex;
+            } catch (UserNotFoundException ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
             }
         }
 
@@ -111,10 +123,10 @@ namespace PostAppApi.Api.Controllers
                 await _manager.DeleteAsync(id);
                 return NoContent();
 
-            } catch (Exception ex)
+            } catch (PostNotFoundException ex)
             {
-                Log.Error(ex.ToString());
-                return BadRequest(ex.ToString());
+                Log.Error(ex.Message);
+                throw ex;
             }
         }
 
