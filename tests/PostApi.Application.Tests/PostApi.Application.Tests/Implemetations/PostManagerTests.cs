@@ -3,6 +3,7 @@ using Moq;
 using PostAppApi.Application.Implementations;
 using PostAppApi.Application.Interfaces.Repositories;
 using PostAppApi.Comunicacao.ModelViews.Post;
+using PostAppApi.Exceptions.PostExceptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace PostApi.Application.Tests.Implemetations
@@ -21,8 +22,8 @@ namespace PostApi.Application.Tests.Implemetations
         [Fact]
         public async void Get_PostByIdAsyncInvalidShouldReturnException()
         {
-            var exception = await Assert.ThrowsAsync<Exception>(() => _manger.GetByIdAsync(0));
-            Assert.Equal("ID da postagem informado não foi encontrado ou é inválido", exception.Message);
+            var exception = await Assert.ThrowsAsync<PostNotFoundException>(() => _manger.GetByIdAsync(0));
+            Assert.Equal("O ID da postagem solicitado não foi encontrado ou é inválido.", exception.Message);
         }
 
         [Fact]
@@ -40,13 +41,13 @@ namespace PostApi.Application.Tests.Implemetations
         [Fact]
         public async void Post_InsertAsyncInvalidId()
         {
-            var exception = await Assert.ThrowsAsync<Exception>(() => _manger.InsertAsync(new PostPostRequestBody
+            var exception = await Assert.ThrowsAsync<UnattributedPostException>(() => _manger.InsertAsync(new PostPostRequestBody
             {
                 Title = "invalid",
                 Body = "invalid_body",
                 
             }));
-            Assert.Equal("Postagem não foi atribuida a nenhum usuário", exception.Message);
+            Assert.Equal("Postagem não foi atribuida a nenhum usuário.", exception.Message);
         }
 
         [Fact]
