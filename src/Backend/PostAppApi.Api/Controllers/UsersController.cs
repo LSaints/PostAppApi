@@ -2,6 +2,8 @@
 using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Comunicacao.ModelViews.User;
 using PostAppApi.Domain.Models;
+using PostAppApi.Exceptions.UserExceptions;
+using Serilog;
 
 namespace PostAppApi.Api.Controllers
 {
@@ -10,16 +12,27 @@ namespace PostAppApi.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserManager _manager;
-        public UsersController(IUserManager manager)
+        private readonly ILogger<UsersController> _logger;
+
+        public UsersController(IUserManager manager, ILogger<UsersController> logger)
         {
             _manager = manager;
+            _logger = logger;
         }
 
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult> GetUsers()
         {
-            return Ok(await _manager.GetAllAsync());
+            try
+            {
+                Log.Information($"Requisição:GET para api/Users");
+                return Ok(await _manager.GetAllAsync());
+            } catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
+            }
         }
 
         // GET: api/Users/username
@@ -27,27 +40,47 @@ namespace PostAppApi.Api.Controllers
         [Route("username")]
         public async Task<ActionResult<User>> GetByUsername(string username)
         {
-            var user = await _manager.GetByUsername(username);
-            if (user == null)
+            try
             {
-                return NotFound("Usuario não encontrado 404");
+                Log.Information("Requisição:GET para api/Users/");
+                var user = await _manager.GetByUsername(username);
+                return Ok(user);
+            } catch (UsernameNotFoundException ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
             }
-            return Ok(user);
         }
 
         // GET: api/Users/email
         [HttpGet]
-        [Route("email")]
+        [Route("email/{email}")]
         public async Task<ActionResult<User>> GetUserByEmail(string email)
         {
-            return Ok(await _manager.GetByEmailAsync(email));
+            try
+            {
+                Log.Information("Requisição:GET para api/Users/");
+                return Ok(await _manager.GetByEmailAsync(email));
+            } catch (EmailNotFoundException ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
+            }
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            return Ok(await _manager.GetByIdAsync(id));
+            try
+            {
+                Log.Information($"Requisição:GET para api/Users/{id}");
+                return Ok(await _manager.GetByIdAsync(id));
+            } catch (UserNotFoundException ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
+            }
         }
 
         // PUT: api/Users/5
@@ -55,12 +88,16 @@ namespace PostAppApi.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> PutUser([FromBody] UserPutRequestBody user)
         {
-            var entityUpdate = await _manager.UpdateAsync(user);
-            if (entityUpdate == null) 
-            {
-                return NotFound();
-            }
-            return Ok(entityUpdate);
+           try
+           {
+                Log.Information("Requisição:PUT para api/Users");
+                var entityUpdate = await _manager.UpdateAsync(user);
+                return Ok(entityUpdate);
+           } catch (Exception ex)
+           {
+                Log.Error(ex.Message);
+                return NotFound(ex.Message);
+           }
         }
 
         // POST: api/Users
@@ -68,8 +105,16 @@ namespace PostAppApi.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(UserPostRequestBody user)
         {
-            var entityInsert = await _manager.InsertAsync(user);
-            return CreatedAtAction(nameof(GetUsers), new { id = entityInsert.Id }, entityInsert);
+            try
+            {
+                Log.Information("Requisição:POST para api/Users");
+                var entityInsert = await _manager.InsertAsync(user);
+                return CreatedAtAction(nameof(GetUsers), new { id = entityInsert.Id }, entityInsert);
+            } catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                return BadRequest(ex.Message);
+            }
 
         }
 
@@ -77,8 +122,15 @@ namespace PostAppApi.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            await _manager.DeleteAsync(id);
-            return NoContent();
+            try {
+                Log.Information($"Requisição:DELETE para api/Users/{id}");
+                await _manager.DeleteAsync(id);
+                return NoContent();
+            } catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                return NotFound(ex.Message);
+            }
         }
 
     }

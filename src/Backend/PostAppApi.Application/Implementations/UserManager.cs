@@ -3,6 +3,7 @@ using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Application.Interfaces.Repositories;
 using PostAppApi.Comunicacao.ModelViews.User;
 using PostAppApi.Domain.Models;
+using PostAppApi.Exceptions.UserExceptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace PostAppApi.Application.Implementations
@@ -33,18 +34,17 @@ namespace PostAppApi.Application.Implementations
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            if (string.IsNullOrEmpty(email))
-                throw new Exception("Email não informado");
+            var user = await _userRepository.GetByEmail(email);
+            if (string.IsNullOrEmpty(email) || user == null)
+                throw new EmailNotFoundException();
 
-            return await _userRepository.GetByEmail(email);
+            return user;
         }
 
         public async Task<User> GetByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
-                throw new Exception("ID do usuario informado não foi encontrado ou é inválido");
-
+            if (user == null || user.Id <= 0) throw new UserNotFoundException();
             Validator.ValidateObject(user, new ValidationContext(user), true);
 
             return user;
@@ -58,10 +58,11 @@ namespace PostAppApi.Application.Implementations
 
         public async Task<User> GetByUsername(string username)
         {
-            if (string.IsNullOrEmpty(username))
-                throw new Exception("Nome de usuario não foi informado");
-            
-            return await _userRepository.GetByUsername(username);
+            var user = await _userRepository.GetByUsername(username);
+            if (string.IsNullOrEmpty(username) || user == null)
+                throw new UsernameNotFoundException();
+
+            return user;
         }
 
         public async Task<User> InsertAsync(UserPostRequestBody entity)
@@ -82,7 +83,7 @@ namespace PostAppApi.Application.Implementations
         public async Task<User> UpdateAsync(UserPutRequestBody entity)
         {
             if (entity.Id <= 0)
-                throw new Exception("ID do usuario informado não foi encontrado");
+                throw new UserNotFoundException();
 
             Validator.ValidateObject(entity, new ValidationContext(entity), true);
 

@@ -9,5 +9,6 @@ namespace PostAppApi.Application.Interfaces.Manager
         public Task<Post> InsertAsync(PostPostRequestBody entity);
         public Task<Post> UpdateAsync(PostPutRequestBody entity);
         public Task<IEnumerable<Post>> GetAllPostsByUserIdAsync(int id);
+        public Task<bool> UserExists(Post entity);
     }
 }

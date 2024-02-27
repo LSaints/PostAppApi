@@ -68,5 +68,13 @@ namespace PostAppApi.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return entity;
         }
+
+        public async Task<bool> UserExists(Post entity)
+        {
+            var user = await _context.Users.FindAsync(entity.UserId);
+            if (user == null)
+                return false;
+            return true;
+        }
     }
 }

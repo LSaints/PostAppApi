@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\PostAppApi.Comunicacao\PostAppApi.Comunicacao.csproj" />
+    <ProjectReference Include="..\..\Shared\PostAppApi.Exceptions\PostAppApi.Exceptions.csproj" />
     <ProjectReference Include="..\PostAppApi.Domain\PostAppApi.Domain.csproj" />
   </ItemGroup>
 
