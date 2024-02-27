@@ -171,8 +171,8 @@ namespace PostApi.Application.Tests.Implemetations
                 Email = "invalid@email.com",
                 Password = "123123"
             };
-            var exception = await Assert.ThrowsAsync<Exception>(() => _manager.UpdateAsync(user));
-            Assert.Equal("ID do usuario informado não foi encontrado", exception.Message);
+            var exception = await Assert.ThrowsAsync<UserNotFoundException>(() => _manager.UpdateAsync(user));
+            Assert.Equal("O ID do usuário solicitado não foi encontrado ou é inválido.", exception.Message);
         }
 
         [Fact]
