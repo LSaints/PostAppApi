@@ -81,7 +81,7 @@ namespace PostAppApi.Api.Controllers
             {
                 Log.Error(ex.Message);
                 throw ex;
-            } catch (UserNotFoundException ex)
+            } catch (UserPostNotFoundException ex)
             {
                 Log.Error(ex.Message);
                 throw ex;
@@ -106,7 +106,7 @@ namespace PostAppApi.Api.Controllers
             {
                 Log.Error(ex.Message);
                 throw ex;
-            } catch (UserNotFoundException ex)
+            } catch (UserPostNotFoundException ex)
             {
                 Log.Error(ex.Message);
                 throw ex;

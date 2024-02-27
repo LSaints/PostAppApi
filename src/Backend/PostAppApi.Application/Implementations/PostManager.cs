@@ -51,7 +51,7 @@ namespace PostAppApi.Application.Implementations
             var entityBody = _mapper.Map<Post>(entity);
 
             if (entity.UserId <= 0) throw new UnattributedPostException();
-            if (await UserExists(entityBody) == false) throw new UserNotFoundException();
+            if (await UserExists(entityBody) == false) throw new UserPostNotFoundException();
 
             return await _repository.InsertAsync(entityBody);
         }
@@ -69,7 +69,7 @@ namespace PostAppApi.Application.Implementations
 
             if (post == null || entity.Id <= 0) throw new PostNotFoundException();
             if (entity.UserId <= 0) throw new UnattributedPostException();
-            if (await UserExists(entityBody) == false) throw new UserNotFoundException();
+            if (await UserExists(entityBody) == false) throw new UserPostNotFoundException();
 
             return await _repository.UpdateAsync(entityBody);
         }

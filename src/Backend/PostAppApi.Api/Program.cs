@@ -67,6 +67,7 @@ try
 
     app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
     app.UseMiddleware<PostExceptionsMiddleware>();
+    app.UseMiddleware<UserExceptionsMiddleware>();
     app.UseMiddleware<RequestSerilLogMiddleware>();
 
     using var scope = app.Services.CreateScope();

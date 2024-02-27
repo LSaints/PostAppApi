@@ -5,6 +5,7 @@ using PostAppApi.Application.Interfaces.Repositories;
 using PostAppApi.Comunicacao.ModelViews.User;
 using PostAppApi.Domain.Enums;
 using PostAppApi.Domain.Models;
+using PostAppApi.Exceptions.UserExceptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace PostApi.Application.Tests.Implemetations
@@ -68,8 +69,8 @@ namespace PostApi.Application.Tests.Implemetations
         [Fact]
         public async void Get_UserByIdAsyncInvalidShouldReturnException()
         {
-            var exception = await Assert.ThrowsAsync<Exception>(() => _manager.GetByIdAsync(0));
-            Assert.Equal("ID do usuario informado não foi encontrado ou é inválido", exception.Message);
+            var exception = await Assert.ThrowsAsync<UserNotFoundException>(() => _manager.GetByIdAsync(0));
+            Assert.Equal("O ID do usuário solicitado não foi encontrado ou é inválido.", exception.Message);
         }
 
         [Fact]
@@ -96,15 +97,15 @@ namespace PostApi.Application.Tests.Implemetations
         [Fact]
         public async void Get_UserByEmailAsyncEmptyShouldReturnException()
         {
-            var exception = await Assert.ThrowsAsync<Exception>(() => _manager.GetByEmailAsync(""));
-            Assert.Equal("Email não informado", exception.Message);
+            var exception = await Assert.ThrowsAsync<EmailNotFoundException>(() => _manager.GetByEmailAsync(""));
+            Assert.Equal("O Email do usuário solicitado não foi encontrado ou é inválido.", exception.Message);
         }
 
         [Fact]
         public async void Get_UserByUsernameInvalidShouldReturnException()
         {
-            var exception = await Assert.ThrowsAsync<Exception>(() => _manager.GetByUsername(""));
-            Assert.Equal("Nome de usuario não foi informado", exception.Message);
+            var exception = await Assert.ThrowsAsync<UsernameNotFoundException>(() => _manager.GetByUsername(""));
+            Assert.Equal("O Email do usuário solicitado não foi encontrado ou é inválido.", exception.Message);
         }
 
         [Fact]
