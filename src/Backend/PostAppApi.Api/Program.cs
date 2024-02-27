@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using Serilog;
 using PostAppApi.Api.Middlewares;
 using PostAppApi.Api.Extensions;
+using PostAppApi.Api.Middlewares.ExceptionsMiddleware;
 
 try
 {
@@ -64,7 +65,9 @@ try
 
     var app = builder.Build();
 
-    app.UseMiddleware<ErrorHandlingMiddleware>();
+    app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+    app.UseMiddleware<PostExceptionsMiddleware>();
+    app.UseMiddleware<UserExceptionsMiddleware>();
     app.UseMiddleware<RequestSerilLogMiddleware>();
 
     using var scope = app.Services.CreateScope();

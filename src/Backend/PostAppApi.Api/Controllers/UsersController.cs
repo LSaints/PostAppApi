@@ -2,6 +2,7 @@
 using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Comunicacao.ModelViews.User;
 using PostAppApi.Domain.Models;
+using PostAppApi.Exceptions.UserExceptions;
 using Serilog;
 
 namespace PostAppApi.Api.Controllers
@@ -30,7 +31,7 @@ namespace PostAppApi.Api.Controllers
             } catch (Exception ex)
             {
                 Log.Error(ex.Message);
-                return BadRequest(ex.Message);
+                throw ex;
             }
         }
 
@@ -44,26 +45,26 @@ namespace PostAppApi.Api.Controllers
                 Log.Information("Requisição:GET para api/Users/");
                 var user = await _manager.GetByUsername(username);
                 return Ok(user);
-            } catch (Exception ex)
+            } catch (UsernameNotFoundException ex)
             {
                 Log.Error(ex.Message);
-                return NotFound(ex.Message);
+                throw ex;
             }
         }
 
         // GET: api/Users/email
         [HttpGet]
-        [Route("email")]
+        [Route("email/{email}")]
         public async Task<ActionResult<User>> GetUserByEmail(string email)
         {
             try
             {
                 Log.Information("Requisição:GET para api/Users/");
                 return Ok(await _manager.GetByEmailAsync(email));
-            } catch (Exception ex)
+            } catch (EmailNotFoundException ex)
             {
                 Log.Error(ex.Message);
-                return NotFound(ex.Message);
+                throw ex;
             }
         }
 
@@ -75,10 +76,10 @@ namespace PostAppApi.Api.Controllers
             {
                 Log.Information($"Requisição:GET para api/Users/{id}");
                 return Ok(await _manager.GetByIdAsync(id));
-            } catch (Exception ex)
+            } catch (UserNotFoundException ex)
             {
-                Log.Error($"{ex.Message}");
-                return NotFound(ex.Message);
+                Log.Error(ex.Message);
+                throw ex;
             }
         }
 
