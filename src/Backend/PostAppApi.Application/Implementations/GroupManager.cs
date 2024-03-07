@@ -3,9 +3,6 @@ using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Application.Interfaces.Repositories;
 using PostAppApi.Comunicacao.ModelViews.Group;
 using PostAppApi.Domain.Models;
-using PostAppApi.Exceptions.PostExceptions;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace PostAppApi.Application.Implementations
 {

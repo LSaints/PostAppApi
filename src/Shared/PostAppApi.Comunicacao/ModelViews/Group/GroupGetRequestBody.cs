@@ -1,4 +1,6 @@
-﻿using PostAppApi.Domain.Commons;
+﻿using PostAppApi.Comunicacao.ModelViews.Post;
+using PostAppApi.Comunicacao.ModelViews.User;
+using PostAppApi.Domain.Commons;
 using PostAppApi.Domain.Models;
 
 namespace PostAppApi.Comunicacao.ModelViews.Group
@@ -8,8 +10,8 @@ namespace PostAppApi.Comunicacao.ModelViews.Group
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsFree { get; set; }
-        public Domain.Models.User Owner { get; set; }
-        public ICollection<Domain.Models.Post> Posts { get; set; }
+        public UserGetRequestBody Owner { get; set; }
+        public ICollection<PostGetRequestBody> Posts { get; set; }
         public ICollection<UserGroup> UserGroups { get; set; }
     }
 }
