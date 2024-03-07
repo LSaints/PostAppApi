@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostAppApi.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostAppApi.Api", "src\Backend\PostAppApi.Api\PostAppApi.Api.csproj", "{51FAF0CB-68F1-40FF-AD1F-06C693A76728}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostApi.Application.Tests", "tests\PostApi.Application.Tests\PostApi.Application.Tests\PostApi.Application.Tests.csproj", "{F3E261B3-B67F-41C6-AD82-9DB6E72E600A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostApi.Application.Tests", "tests\PostApi.Application.Tests\PostApi.Application.Tests\PostApi.Application.Tests.csproj", "{F3E261B3-B67F-41C6-AD82-9DB6E72E600A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

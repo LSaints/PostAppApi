@@ -8,6 +8,8 @@ namespace PostAppApi.Domain.Models
         public string Body { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public int? GroupId { get; set; }
+        public Group? Group { get; set; }
         public int? RatingId { get; set; }
         public ICollection<Rating>? Ratings { get; } = new List<Rating>();
     }

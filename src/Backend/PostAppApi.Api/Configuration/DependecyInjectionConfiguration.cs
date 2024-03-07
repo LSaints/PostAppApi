@@ -17,6 +17,9 @@ namespace PostAppApi.Api.Configuration
 
             services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddScoped<IRatingManager, RatingManager>();
+
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IGroupManager, GroupManager>();
         }
     }
 }

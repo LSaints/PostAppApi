@@ -47,7 +47,6 @@ namespace PostAppApi.Application.Implementations
         public async Task<Post> InsertAsync(PostPostRequestBody entity)
         {
 
-            Validator.ValidateObject(entity, new ValidationContext(entity), true);
             var entityBody = _mapper.Map<Post>(entity);
 
             if (entity.UserId <= 0) throw new UnattributedPostException();
