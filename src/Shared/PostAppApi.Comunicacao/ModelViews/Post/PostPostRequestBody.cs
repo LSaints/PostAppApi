@@ -10,5 +10,6 @@ namespace PostAppApi.Comunicacao.ModelViews.Post
         public string Body { get; set; }
         [Required]
         public int UserId { get; set; }
+        public int? GroupId { get; set; }
     }
 }

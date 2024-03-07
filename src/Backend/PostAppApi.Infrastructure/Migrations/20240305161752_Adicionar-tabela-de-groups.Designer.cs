@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PostAppApi.Infrastructure;
 
@@ -10,9 +11,10 @@ using PostAppApi.Infrastructure;
 namespace PostAppApi.Infrastructure.Migrations
 {
     [DbContext(typeof(PostAppApiContext))]
-    partial class PostAppApiContextModelSnapshot : ModelSnapshot
+    [Migration("20240305161752_Adicionar-tabela-de-groups")]
+    partial class Adicionartabeladegroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,9 +130,6 @@ namespace PostAppApi.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("GroupOwnerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -168,7 +167,7 @@ namespace PostAppApi.Infrastructure.Migrations
             modelBuilder.Entity("PostAppApi.Domain.Models.Group", b =>
                 {
                     b.HasOne("PostAppApi.Domain.Models.User", "Owner")
-                        .WithMany("GroupsOwner")
+                        .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -245,8 +244,6 @@ namespace PostAppApi.Infrastructure.Migrations
 
             modelBuilder.Entity("PostAppApi.Domain.Models.User", b =>
                 {
-                    b.Navigation("GroupsOwner");
-
                     b.Navigation("Posts");
 
                     b.Navigation("UserGroups");

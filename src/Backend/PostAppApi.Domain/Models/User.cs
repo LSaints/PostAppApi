@@ -9,7 +9,8 @@ namespace PostAppApi.Domain.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public Roles Roles { get; set; }
-        public ICollection<Post> Posts { get; } = new List<Post>();
+        public ICollection<Post>? Posts { get; } = new List<Post>();
+        public ICollection<UserGroup>? UserGroups { get; set; }
 
     }
 }
