@@ -17,7 +17,8 @@ namespace PostAppApi.Api.Configuration
 
             services.AddAutoMapper(
                 typeof(PostPostRequestBody),
-                typeof(PostPutRequestBody));
+                typeof(PostPutRequestBody),
+                typeof(PostGetRequestBody));
 
             services.AddAutoMapper(
                 typeof(PostRatingRequestBody),

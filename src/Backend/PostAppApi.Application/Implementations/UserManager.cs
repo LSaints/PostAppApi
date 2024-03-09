@@ -27,60 +27,55 @@ namespace PostAppApi.Application.Implementations
             await _userRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<UserGetRequestBody>> GetAllAsync()
         {
-            return await _userRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<User>, IEnumerable<UserGetRequestBody>>(await _userRepository.GetAllAsync());
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<UserGetRequestBody> GetByEmailAsync(string email)
         {
             var user = await _userRepository.GetByEmail(email);
             if (string.IsNullOrEmpty(email) || user == null)
                 throw new EmailNotFoundException();
 
-            return user;
+            return _mapper.Map<User, UserGetRequestBody>(await _userRepository.GetByEmail(email)); ;
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<UserGetRequestBody> GetByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null || user.Id <= 0) throw new UserNotFoundException();
             Validator.ValidateObject(user, new ValidationContext(user), true);
 
-            return user;
+            return _mapper.Map<User, UserGetRequestBody>(await _userRepository.GetByIdAsync(id));
         }
 
-        public async Task<User> GetByLogin(UserLoginRequestBody user)
+        public async Task<UserGetRequestBody> GetByLogin(UserLoginRequestBody user)
         {
             var entityBody = _mapper.Map<User>(user);
-            return await _userRepository.GetByLogin(entityBody);
+            return _mapper.Map<User, UserGetRequestBody>(await _userRepository.GetByLogin(entityBody));
         }
 
-        public async Task<User> GetByUsername(string username)
+        public async Task<UserGetRequestBody> GetByUsername(string username)
         {
             var user = await _userRepository.GetByUsername(username);
             if (string.IsNullOrEmpty(username) || user == null)
                 throw new UsernameNotFoundException();
 
-            return user;
+            return _mapper.Map<User, UserGetRequestBody>(await _userRepository.GetByUsername(username));
         }
 
-        public async Task<User> InsertAsync(UserPostRequestBody entity)
+        public async Task<UserGetRequestBody> InsertAsync(UserPostRequestBody entity)
         {
             if (entity.Username == null) 
                 throw new Exception("Nome de Usuario não foi informado");
-            
+
             Validator.ValidateObject(entity, new ValidationContext(entity), true);
+
             var entityBody = _mapper.Map<User>(entity);
-            return await _userRepository.InsertAsync(entityBody);
+            return _mapper.Map<User, UserGetRequestBody>(await _userRepository.InsertAsync(entityBody));
         }
-
-        public Task<User> InsertAsync(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User> UpdateAsync(UserPutRequestBody entity)
+        public async Task<UserGetRequestBody> UpdateAsync(UserPutRequestBody entity)
         {
             if (entity.Id <= 0)
                 throw new UserNotFoundException();
@@ -88,12 +83,7 @@ namespace PostAppApi.Application.Implementations
             Validator.ValidateObject(entity, new ValidationContext(entity), true);
 
             var entityBody = _mapper.Map<User>(entity);
-            return await _userRepository.UpdateAsync(entityBody);
-        }
-
-        public Task<User> UpdateAsync(User entity)
-        {
-            throw new NotImplementedException();
+            return _mapper.Map<User, UserGetRequestBody>(await _userRepository.UpdateAsync(entityBody));
         }
     }
 }

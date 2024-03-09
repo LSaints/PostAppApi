@@ -4,12 +4,15 @@ using PostAppApi.Domain.Models;
 
 namespace PostAppApi.Application.Interfaces.Manager
 {
-    public interface IUserManager : IManager<User>
+    public interface IUserManager
     {
-        public Task<User> InsertAsync(UserPostRequestBody entity);
-        public Task<User> UpdateAsync(UserPutRequestBody entity);
-        public Task<User> GetByLogin(UserLoginRequestBody user);
-        public Task<User> GetByEmailAsync(string email);
-        public Task<User> GetByUsername(string username);
+        Task<IEnumerable<UserGetRequestBody>> GetAllAsync();
+        public Task<UserGetRequestBody> InsertAsync(UserPostRequestBody entity);
+        public Task<UserGetRequestBody> UpdateAsync(UserPutRequestBody entity);
+        public Task<UserGetRequestBody> GetByLogin(UserLoginRequestBody user);
+        public Task<UserGetRequestBody> GetByEmailAsync(string email);
+        public Task<UserGetRequestBody> GetByUsername(string username);
+        public Task<UserGetRequestBody> GetByIdAsync(int id);
+        public Task DeleteAsync(int id);
     }
 }

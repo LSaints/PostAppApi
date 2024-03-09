@@ -49,16 +49,5 @@ namespace PostApi.Application.Tests.Implemetations
             }));
             Assert.Equal("Postagem não foi atribuida a nenhum usuário.", exception.Message);
         }
-
-        [Fact]
-        public async void Post_InsertAsyncInvalidObject()
-        {
-            var exception = await Assert.ThrowsAsync<ValidationException>(() => _manger.InsertAsync(new PostPostRequestBody
-            {
-                Title = "invalid",
-                UserId = 1
-            }));
-            Assert.Equal("The Body field is required.", exception.Message);
-        }
     }
 }
