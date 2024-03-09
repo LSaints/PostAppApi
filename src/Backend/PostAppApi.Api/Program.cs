@@ -18,7 +18,6 @@ try
     SerilogExtension.AddSerilogApi(builder.Configuration);
     builder.Host.UseSerilog(Log.Logger);
 
-    var AllowOrigin = "AllowOrigin";
     var origins = builder.Configuration["AllowedHosts"];
     var connection = builder.Configuration.GetConnectionString("MysqlConnection");
     var key = Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"]);
@@ -28,7 +27,7 @@ try
 
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().
+        options.AddPolicy(origins, options => options.AllowAnyOrigin().AllowAnyMethod().
          AllowAnyHeader());
     });
 
@@ -86,7 +85,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.UseCors("AllowOrigin");
+    app.UseCors(origins);
 
     if (!app.Environment.IsDevelopment())
     {

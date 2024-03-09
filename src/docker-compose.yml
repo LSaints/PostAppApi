@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+
+    depends_on:
+      - db
+    
+    ports:
+      - "80:80"  # Porta exposta para acessar a API
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker  # Define o ambiente de execução da API
+      - ConnectionStrings__MysqlConnection=Server=db;Port=3306;Uid=root;Database=Db_PostApp;Pwd=passWord01;
+
+  db:
+    image: mysql:8.3.0
+    ports:
+      - "3306:3306"  # Porta padrão do MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: passWord01  # Define a senha do usuário root
+      MYSQL_DATABASE: Db_PostApp 
+
+  prometheus:
+    image: prom/prometheus:v2.28.1
+    ports:
+      - "9090:9090"  # Porta do Prometheus
+
+  grafana:
+    image: grafana/grafana:8.2.5
+    ports:
+      - "3000:3000"  # Porta do Grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=Mudar@123  # Define a senha do administrador do Grafana
