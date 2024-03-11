@@ -37,5 +37,3 @@ A PostApp API é uma solução completa e poderosa para gerenciar publicações 
 - **Monitoramento com Prometheus e Grafana**: A saúde da API é monitorada em tempo real através do Prometheus, que exporta métricas importantes. Essas métricas são visualizadas em um dashboard intuitivo criado com Grafana, permitindo uma análise detalhada do desempenho da aplicação.
 
 - **Integração Contínua com Jenkins**: A implementação de integração contínua é realizada utilizando Jenkins. Isso permite automatizar o processo de build, testes e implantação, garantindo a qualidade e consistência do código em cada etapa do desenvolvimento.
-
-## Tecnologias Util
