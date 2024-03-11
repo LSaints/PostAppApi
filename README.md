@@ -18,7 +18,7 @@ A PostApp API é uma solução completa e poderosa para gerenciar publicações 
 
 ![metrics](https://github.com/LSaints/PostAppApi/assets/132153413/ddc34b6f-f739-45ca-895e-1007f39a1bc0)
 
-## Dashboard
+## Monitoramento
 
 ![Captura de tela 2024-03-11 131122](https://github.com/LSaints/PostAppApi/assets/132153413/7ae1e3a2-031e-4885-9023-03725c91b3ec)
 
