@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Expõe a porta 80 para acesso à API
-EXPOSE 80
+EXPOSE 8080
 
 # Define o comando de inicialização da aplicação
 ENTRYPOINT ["dotnet", "PostAppApi.Api.dll"]

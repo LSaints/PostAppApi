@@ -1,6 +1,7 @@
 ﻿using PostAppApi.Domain.Commons;
 using PostAppApi.Exceptions.Messages;
 using PostAppApi.Exceptions.PostExceptions;
+using PostAppApi.Exceptions.UserExceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -44,6 +45,31 @@ namespace PostAppApi.Api.Middlewares.ExceptionsMiddleware
                     exceptionModel.ResponseStatus = (int)HttpStatusCode.NotFound;
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     exceptionModel.ReponseMessage = MessagesExceptions.NOT_FOUND_EXCEPTION;
+                    break;
+                case PostNotFoundException ex:
+                    exceptionModel.ResponseStatus = (int)HttpStatusCode.NotFound;
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    exceptionModel.ReponseMessage = PostMessagesExceptions.NOT_FOUND_EXCEPTION;
+                    break;
+                case UserPostNotFoundException ex:
+                    exceptionModel.ResponseStatus = (int)HttpStatusCode.NotFound;
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    exceptionModel.ReponseMessage = PostMessagesExceptions.USER_NOT_FOUND_EXCEPTION;
+                    break;
+                case UserNotFoundException ex:
+                    exceptionModel.ResponseStatus = (int)HttpStatusCode.NotFound;
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    exceptionModel.ReponseMessage = UserMessagesExceptions.NOT_FOUND_EXCEPTION;
+                    break;
+                case EmailNotFoundException ex:
+                    exceptionModel.ResponseStatus = (int)HttpStatusCode.NotFound;
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    exceptionModel.ReponseMessage = UserMessagesExceptions.EMAIL_NOT_FOUND_EXCEPTION;
+                    break;
+                case UsernameNotFoundException ex:
+                    exceptionModel.ResponseStatus = (int)HttpStatusCode.NotFound;
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    exceptionModel.ReponseMessage = UserMessagesExceptions.USERNAME_NOT_FOUND_EXCEPTION;
                     break;
                 default:
                     exceptionModel.ResponseStatus = (int)HttpStatusCode.InternalServerError;

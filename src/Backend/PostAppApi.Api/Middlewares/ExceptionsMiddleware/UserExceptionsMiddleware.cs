@@ -1,5 +1,6 @@
 ﻿using PostAppApi.Domain.Commons;
 using PostAppApi.Exceptions.Messages;
+using PostAppApi.Exceptions.PostExceptions;
 using PostAppApi.Exceptions.UserExceptions;
 using System.Net;
 using System.Text.Json;
@@ -50,6 +51,8 @@ namespace PostAppApi.Api.Middlewares.ExceptionsMiddleware
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     exceptionModel.ReponseMessage = UserMessagesExceptions.USERNAME_NOT_FOUND_EXCEPTION;
                     break;
+                
+
             }
             var exceptionResult = JsonSerializer.Serialize(exceptionModel);
             await context.Response.WriteAsync(exceptionResult);

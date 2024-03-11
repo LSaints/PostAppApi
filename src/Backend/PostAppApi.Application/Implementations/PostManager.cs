@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using PostAppApi.Application.Interfaces.Manager;
 using PostAppApi.Application.Interfaces.Repositories;
-using PostAppApi.Comunicacao.ModelViews.Group;
 using PostAppApi.Comunicacao.ModelViews.Post;
 using PostAppApi.Domain.Models;
 using PostAppApi.Exceptions.PostExceptions;
@@ -28,21 +27,25 @@ namespace PostAppApi.Application.Implementations
 
         public async Task<IEnumerable<PostGetRequestBody>> GetAllAsync()
         {
-            return _mapper.Map<IEnumerable<Post>, IEnumerable<PostGetRequestBody>>(await _repository.GetAllAsync());
+            var posts = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<Post>, IEnumerable<PostGetRequestBody>>(posts);
         }
 
         public async Task<IEnumerable<PostGetRequestBody>> GetAllPostsByUserIdAsync(int id)
         {
             var posts = await _repository.GetAllPostsByUserIdAsync(id);
-            if (posts.All(p => p.UserId == null)) throw new PostNotFoundException();
+            if (posts.All(p => p.UserId == null)) throw new UnattributedPostException();
+            if (posts.All(p => p.Id == null)) throw new PostNotFoundException();
             return _mapper.Map<IEnumerable<Post>, IEnumerable<PostGetRequestBody>>(await _repository.GetAllPostsByUserIdAsync(id));
         }
 
         public async Task<PostGetRequestBody> GetByIdAsync(int id)
         {
-            var post = _mapper.Map<Post, PostGetRequestBody>(await _repository.GetByIdAsync(id));;
+            var post = await _repository.GetByIdAsync(id);
             if (post == null) throw new PostNotFoundException();
-            return post;
+            Validator.ValidateObject(post, new ValidationContext(post), true);
+
+            return _mapper.Map<Post, PostGetRequestBody>(await _repository.GetByIdAsync(id));
         }
 
         public async Task<PostGetRequestBody> InsertAsync(PostPostRequestBody entity)

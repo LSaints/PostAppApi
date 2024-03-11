@@ -43,8 +43,6 @@ namespace PostAppApi.Api.Middlewares.ExceptionsMiddleware
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     exceptionModel.ReponseMessage = PostMessagesExceptions.USER_NOT_FOUND_EXCEPTION;
                     break;
-
-
             }
             var exceptionResult = JsonSerializer.Serialize(exceptionModel);
             await context.Response.WriteAsync(exceptionResult);
