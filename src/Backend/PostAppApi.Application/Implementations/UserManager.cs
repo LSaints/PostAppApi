@@ -12,6 +12,7 @@ namespace PostAppApi.Application.Implementations
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+
         public UserManager(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;

@@ -49,6 +49,10 @@ namespace PostAppApi.Api.Controllers
             {
                 Log.Error(ex.Message);
                 throw ex;
+            } catch (UnattributedPostException ex)
+            {
+                Log.Error(ex.Message);
+                throw ex;
             }
         }
 

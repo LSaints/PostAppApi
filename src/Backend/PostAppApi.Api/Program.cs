@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using PostAppApi.Api.Configuration;
 using PostAppApi.Infrastructure;
-using System.Text;
 using System.Text.Json.Serialization;
 using Serilog;
 using PostAppApi.Api.Middlewares;
@@ -20,7 +17,7 @@ try
 
     var origins = builder.Configuration["AllowedHosts"];
     var connection = builder.Configuration.GetConnectionString("MysqlConnection");
-    var key = Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"]);
+    
 
     builder.Services.AddControllers().AddJsonOptions(
         x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
@@ -37,22 +34,7 @@ try
         options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
 
-    builder.Services.AddAuthentication(x =>
-    {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer(x =>
-    {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-        };
-    });
+    builder.Services.UseJwtAuthentication(builder);
 
     builder.Services.AddScoped<DbContext, PostAppApiContext>();
 
@@ -65,8 +47,6 @@ try
     var app = builder.Build();
 
     app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-    app.UseMiddleware<PostExceptionsMiddleware>();
-    app.UseMiddleware<UserExceptionsMiddleware>();
     app.UseMiddleware<RequestSerilLogMiddleware>();
 
     using var scope = app.Services.CreateScope();
@@ -83,6 +63,7 @@ try
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        app.UsePrometheus();
     }
 
     app.UseCors(origins);
@@ -94,9 +75,11 @@ try
 
     app.UseAuthentication();
 
-    app.MapGet("/", () => $"Post App Api em {builder.Configuration["env"]}");
+    app.MapGet("", () => $"Post App Api em {builder.Configuration["env"]}");
 
     app.UseAuthorization();
+
+    app.UsePrometheus();
 
     app.MapControllers();
 
