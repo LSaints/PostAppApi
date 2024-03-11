@@ -1,6 +1,6 @@
 # PostApp API
 
-A PostApp API é uma aplicação desenvolvida em .NET Core que fornece uma interface robusta para publicações de texto e criação de grupos. Essa API é projetada para oferecer uma experiência segura e escalável, incorporando autenticação JWT para garantir a segurança dos dados e das interações dos usuários.
+A PostApp API é uma aplicação desenvolvida em .NET Core que fornece uma interface publicações de texto e criação de grupos. Essa API é projetada para oferecer uma experiência segura e escalável, incorporando autenticação JWT para garantir a segurança dos dados e das interações dos usuários.
 
 ## Descrição
 
