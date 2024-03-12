@@ -54,5 +54,17 @@ services:
     networks:
       - my_network
 
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "443:443"
+    depends_on:
+      - api
+    networks:
+      - my_network
+
 networks:
   my_network:
