@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # <-- Servico - MySql -->
   db:
     container_name: Database_PostApp
     image: mysql:8.3.0
@@ -12,8 +11,7 @@ services:
       MYSQL_DATABASE: Db_PostApp
     networks:
       - my_network
-
-  # <-- Servico - Prometheus -->
+      
   prometheus:
     container_name: Prometheus
     build: 
@@ -23,8 +21,7 @@ services:
       - "9090:9090"  # Porta do Prometheus
     networks:
       - my_network
-  
-  # <-- Servico - Grafana -->        
+      
   grafana:
     container_name: Grafana
     build:
@@ -34,11 +31,10 @@ services:
         version: 1
     image: grafana-local
     ports:
-      - 3000:3000
+      - 3000:3000 # Porta do Grafana
     networks:
       - my_network
   
-  # <-- Servico - API PostApp -->     
   api:
     container_name: API_PostApp
     build:
@@ -60,7 +56,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "443:443"
+      - "443:443" # Porta do nginx
     depends_on:
       - api
     networks:
