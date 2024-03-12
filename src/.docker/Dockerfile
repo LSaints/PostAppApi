@@ -17,7 +17,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Expõe a porta 80 para acesso à API
+# Expõe a porta 8080 para acesso à API
 EXPOSE 8080
 
 # Define o comando de inicialização da aplicação

@@ -2,7 +2,10 @@ global:
   scrape_interval: 5s
 
 scrape_configs:
-  - job_name: "web_api_metrics-job"
+  - job_name: "Post_app_api_metrics"
     metrics_path: /metrics
     static_configs:
-      - targets: ["HOST_IP:8080"]
+      - targets: ["host.docker.internal:443"]
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
